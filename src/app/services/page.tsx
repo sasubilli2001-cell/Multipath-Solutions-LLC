@@ -18,7 +18,7 @@ export default function ServicesPage() {
         </div>
         
         {/* Reuse the newly redesigned Services component */}
-        <div className="mt-[-60px]">
+        <div className="mt-8">
             <ServicesComponent />
         </div>
 
