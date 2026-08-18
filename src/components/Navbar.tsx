@@ -47,6 +47,12 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
+            href="/admin/login"
+            className="text-xs uppercase tracking-widest font-semibold transition-colors hover:text-accent text-slate-400 border-l border-white/20 pl-6"
+          >
+            Admin
+          </Link>
+          <Link
             href="/contact"
             className="ml-4 px-6 py-2 rounded-full text-xs uppercase tracking-widest font-bold transition-all bg-accent text-primary hover:bg-white"
           >
@@ -80,6 +86,13 @@ export default function Navbar() {
               {item}
             </Link>
           ))}
+          <Link
+            href="/admin/login"
+            className="text-xl font-bold transition-colors hover:text-accent text-slate-400 pt-4 border-t border-white/10"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Admin Login
+          </Link>
         </motion.div>
       )}
     </nav>
