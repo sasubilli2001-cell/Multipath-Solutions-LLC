@@ -155,8 +155,9 @@ export default function Careers() {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Google sign in failed:", error);
+      alert("Google Sign-In Error: " + (error.message || "Unknown error. Please ensure popups are allowed and Google Auth is enabled in Firebase."));
     }
   };
 
