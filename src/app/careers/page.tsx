@@ -114,14 +114,22 @@ export default function Careers() {
     e.preventDefault();
     if (!selectedJob) return;
 
+    // Check file size (limit to 10MB)
+    if (resumeFile && resumeFile.size > 10 * 1024 * 1024) {
+      alert("The selected file is too large. Please upload a resume or portfolio smaller than 10MB.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       let finalResumeUrl = formData.resumeUrl;
 
       // Upload file if selected
       if (resumeFile) {
+        console.log("Starting file upload...", resumeFile.name, resumeFile.size);
         const fileRef = ref(storage, `resumes/${Date.now()}_${resumeFile.name}`);
         await uploadBytes(fileRef, resumeFile);
+        console.log("File uploaded successfully.");
         finalResumeUrl = await getDownloadURL(fileRef);
       }
 
@@ -144,9 +152,9 @@ export default function Careers() {
         setResumeFile(null);
         signOut(auth); // Automatically sign out after application
       }, 3000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Application failed:", error);
-      alert("Failed to submit application. Please verify your Firebase Storage Rules allow uploads.");
+      alert("Failed to submit application: " + (error.message || "Please verify your Firebase Storage Rules allow uploads."));
     } finally {
       setSubmitting(false);
     }
