@@ -71,3 +71,17 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(102, 252, 241, 0.5); /* Accent color hover */
 }
+
+/* Fix browser autofill styling for dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0b0c10 inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
