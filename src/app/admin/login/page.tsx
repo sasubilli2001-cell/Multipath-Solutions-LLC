@@ -24,7 +24,14 @@ export default function AdminLogin() {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/admin/dashboard");
     } catch (err: any) {
-      setError(err.message || "Failed to log in. Please check your credentials.");
+      // Map Firebase errors to user-friendly messages
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError("Incorrect email or password. Please try again.");
+      } else if (err.code === 'auth/too-many-requests') {
+        setError("Too many failed attempts. Please try again later.");
+      } else {
+        setError("Failed to log in. Please check your credentials and try again.");
+      }
     } finally {
       setLoading(false);
     }
