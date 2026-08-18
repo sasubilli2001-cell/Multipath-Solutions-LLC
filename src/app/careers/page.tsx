@@ -303,23 +303,39 @@ export default function Careers() {
                       <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-3 flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-accent"></div> About the Role
                       </h4>
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
-                        {selectedJob.description.replace(/□|-/g, '•')}
-                      </p>
+                      <div className="text-slate-300 text-sm leading-relaxed space-y-3">
+                        {selectedJob.description.split('\n').map((para, i) => {
+                          if (!para.trim()) return null;
+                          // Catch common bullet points from MS Word pastes (including invisible/weird chars like )
+                          const isBullet = /^[•\-\*□]/.test(para.trim()) || para.trim().charCodeAt(0) === 61623 || para.trim().startsWith('') || para.trim().startsWith('');
+                          if (isBullet) {
+                            return (
+                              <div key={i} className="flex items-start gap-3 pl-2">
+                                <span className="text-accent mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0"></span>
+                                <span>{para.replace(/^[•\-\*□\s]+/, '').trim()}</span>
+                              </div>
+                            );
+                          }
+                          return <p key={i}>{para}</p>;
+                        })}
+                      </div>
                     </div>
 
                     {selectedJob.requirements && selectedJob.requirements.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <div className="mt-6">
+                        <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-accent"></div> Requirements
                         </h4>
-                        <ul className="space-y-2">
-                          {selectedJob.requirements.map((req, idx) => (
-                            <li key={idx} className="text-slate-300 text-sm flex items-start gap-2">
-                              <span className="text-accent mt-0.5">•</span>
-                              <span className="leading-relaxed">{req.replace(/□|-/g, '').trim()}</span>
-                            </li>
-                          ))}
+                        <ul className="space-y-3">
+                          {selectedJob.requirements.map((req, idx) => {
+                            if (!req.trim()) return null;
+                            return (
+                              <li key={idx} className="text-slate-300 text-sm flex items-start gap-3 pl-2">
+                                <span className="text-accent mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0"></span>
+                                <span className="leading-relaxed">{req.replace(/^[•\-\*□\s]+/, '').trim()}</span>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     )}
