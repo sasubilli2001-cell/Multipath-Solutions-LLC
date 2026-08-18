@@ -6,14 +6,15 @@ import { getActiveJobs, getAllApplications, JobPosting, JobApplication, addJob, 
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { LogOut, Plus, Trash2, Briefcase, Users, X, LayoutDashboard, Activity, CheckCircle, Clock, AlertCircle, Download } from "lucide-react";
-import { motion } from "framer-motion";
+import { LogOut, Plus, Trash2, Briefcase, Users, X, LayoutDashboard, Activity, CheckCircle, Clock, AlertCircle, Download, Menu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "jobs" | "applications">("overview");
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // New Job Form State
   const [showNewJobModal, setShowNewJobModal] = useState(false);
@@ -200,7 +201,7 @@ export default function AdminDashboard() {
         {/* Main Content */}
         <main className="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
           {/* Mobile Header */}
-          <div className="md:hidden h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6 shadow-sm z-20">
+          <div className="md:hidden h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6 shadow-sm z-30 relative">
             <div className="flex items-center">
               <div className="w-8 h-8 mr-2 shrink-0 flex items-center justify-center">
                 <img src="/logo.png" alt="Logo" className="max-h-full max-w-full object-contain" />
@@ -210,8 +211,62 @@ export default function AdminDashboard() {
                 <span className="text-blue-600 text-xs font-semibold">Admin Panel</span>
               </h1>
             </div>
-            <button onClick={handleLogout} className="p-2 text-slate-500 hover:text-red-500"><LogOut className="w-5 h-5"/></button>
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+              className="p-2 text-slate-600 hover:text-blue-600 transition-colors"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
+
+          {/* Mobile Menu Dropdown */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="md:hidden absolute top-16 left-0 right-0 bg-white border-b border-slate-200 shadow-xl z-20"
+              >
+                <div className="p-4 space-y-2">
+                  {[
+                    { id: "overview", icon: Activity, label: "Overview" },
+                    { id: "jobs", icon: Briefcase, label: "Job Postings", badge: jobs.length },
+                    { id: "applications", icon: Users, label: "Applications", badge: metrics.newApps > 0 ? metrics.newApps : undefined, badgeColor: "bg-red-500 text-white" }
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => { setActiveTab(item.id as any); setIsMobileMenuOpen(false); }}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                        activeTab === item.id 
+                          ? "bg-blue-50 text-blue-700" 
+                          : "text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <item.icon className="h-5 w-5 mr-3 opacity-80" />
+                        {item.label}
+                      </div>
+                      {item.badge !== undefined && (
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${item.badgeColor || "bg-slate-200 text-slate-700"}`}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                  <div className="pt-2 mt-2 border-t border-slate-100">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 transition-all"
+                    >
+                      <LogOut className="h-5 w-5 mr-3 opacity-80" />
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Content Area */}
           <div className="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar">
