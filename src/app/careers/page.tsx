@@ -417,8 +417,8 @@ export default function Careers() {
                           <input required type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent focus:bg-white/10 transition-colors" />
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Resume Document (PDF or Word)</label>
-                          <input type="file" required accept=".pdf,.doc,.docx" onChange={(e) => setResumeFile(e.target.files?.[0] || null)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-slate-300 text-sm focus:outline-none focus:border-accent focus:bg-white/10 transition-colors file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-accent file:text-primary hover:file:bg-white cursor-pointer" />
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Resume Document (PDF, Word, ZIP)</label>
+                          <input type="file" required accept=".pdf,.doc,.docx,.zip" onChange={(e) => setResumeFile(e.target.files?.[0] || null)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-slate-300 text-sm focus:outline-none focus:border-accent focus:bg-white/10 transition-colors file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-accent file:text-primary hover:file:bg-white cursor-pointer" />
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Cover Letter (Optional)</label>
